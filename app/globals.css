@@ -303,7 +303,7 @@
 }
 
 @utility pattern {
-  @apply bg-[url('/pattern.png')] bg-top bg-no-repeat;
+  @apply bg-[url('/pattern.png')] bg-top bg-no-repeat bg-cover;
 }
 
 @utility blue-gradient-dark {
