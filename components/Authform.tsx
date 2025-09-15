@@ -19,9 +19,9 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
 import FormField from "@/components/FormField";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/Firebase/client";
-import { signUp } from "@/lib/actions/auth.action";
+import { signIn, signUp } from "@/lib/actions/auth.action";
 
 
 
@@ -69,6 +69,19 @@ const Authform = ({type} : {type:FormType}) => {
         console.log('SIGN UP',values);
       }
       else {
+        const {email,password} = values;
+
+        const userCredential = await signInWithEmailAndPassword(auth,email,password);
+
+        const idToken = await userCredential.user.getIdToken();
+
+        if(!idToken){
+          toast.error("Sign in failed")
+          return;
+        }
+        await signIn({
+          email,idToken
+        })
         toast.success("Signed in successfully");
         router.push("/");
         console.log('SIGN IN',values);
